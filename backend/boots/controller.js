@@ -46,36 +46,42 @@ export async function getVerfuegbaresBoot(req, res) {
   const startDatum = new Date(from);
   const endDatum = new Date(bis);
   console.log(startDatum);
-  const verfuegbareBoote = [];
-  // const verfuegbareBoote = await Bootdb.find({
-  //   $and: [
-  //     {
-  //       "verfuegberzeit.start": {
-  //         $lte: startDatum,
-  //       },
-  //     },
-  //     {
-  //       "verfuegberzeit.end": {
-  //         $gte: endDatum,
-  //       },
-  //     },
-  //   ],
+  // const verfuegbareBoote = [];
+  const verfuegbareBoote = await Bootdb.find({
+    $and: [
+      {
+        "verfuegberzeit.start": {
+          $lte: startDatum,
+        },
+      },
+      {
+        "verfuegberzeit.end": {
+          $gte: endDatum,
+        },
+      },
+    ],
+  });
+  // try {
+  //   let reservierteBoote = await Bootdb.find({
+  // "reservierungen.reservierungsdatum.start": { $lte: startDatum },
+  // "reservierungen.reservierungsdatum.end": { $gte: endDatum },
+  // reservierungen: {
+  //   $elemMatch: {
+  //     "reservierungsdatum.start": { $lte: startDatum },
+  //     "reservierungsdatum.end": { $gte: endDatum },
+  //   },
+  // },
   // });
-  try {
-    const reservierteBoote = await Bootdb.find({
-      // "reservierungen.reservierungsdatum.start": { $lte: startDatum },
-      // "reservierungen.reservierungsdatum.end": { $gte: endDatum },
-    });
-    console.log("reservierte Boote =>", reservierteBoote);
-
-    // verfuegbareBoote = await Bootdb.find({
-    //   "verfuegberzeit.start": { $lte: startDatum },
-    //   "verfuegberzeit.end": { $gte: endDatum },
-    //   _id: { $nin: reservierteBoote.map((boot) => boot._id) },
-    // });
-  } catch (error) {
-    console.log("my Error =>", error);
-  }
+  //   console.log("reservierte Boote =>", reservierteBoote[0].reservierungen);
+  //   reservierteBoote = reservierteBoote[0].reservierungen;
+  //   verfuegbareBoote = await Bootdb.find({
+  //     "verfuegberzeit.start": { $lte: startDatum },
+  //     "verfuegberzeit.end": { $gte: endDatum },
+  //     _id: { $nin: reservierteBoote.map((boot) => boot._id) },
+  //   });
+  // } catch (error) {
+  //   console.log("my Error =>", error);
+  // }
 
   // console.log(verfuegbareBoote);
   res.json(verfuegbareBoote);
